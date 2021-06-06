@@ -1,0 +1,78 @@
+var sessionInterface = require('../lib/sessionInterface'),
+    tolerate = require('tolerance');
+
+function exists(toCheck) {
+  var _exists = require('fs').existsSync || require('path').existsSync;
+  if (require('fs').accessSync) {
+    _exists = function (toCheck) {
+      try {
+        require('fs').accessSync(toCheck);
+        return true;
+      } catch (e) {
+        return false;
+      }
+    };
+  }
+  return _exists(toCheck);
+}
+
+function getSpecificStore(options) {
+  options = options || {};
+
+  options.type = options.type || 'inmemory';
+
+  options.type = options.type.toLowerCase();
+
+  var dbPath = __dirname + "/databases/" + options.type + ".js";
+
+  if (!exists(dbPath)) {
+    var errMsg = 'Implementation for db "' + options.type + '" does not exist!';
+    console.log(errMsg);
+    throw new Error(errMsg);
+  }
+
+  try {
+    var db = require(dbPath);
+    return db;
+  } catch (err) {
+
+    if (err.message.indexOf('Cannot find module') >= 0 &&
+        err.message.indexOf("'") > 0 &&
+        err.message.lastIndexOf("'") !== err.message.indexOf("'")) {
+
+      var moduleName = err.message.substring(err.message.indexOf("'") + 1, err.message.lastIndexOf("'"));
+      console.log('Please install module "' + moduleName +
+                  '" to work with db implementation "' + options.type + '"!');
+    }
+
+    throw err;
+  }
+}
+
+module.exports = {
+  createSessionStore: function(options, callback) {
+    if (typeof options === 'function') {
+      callback = options;
+      options = {};
+    }
+
+    options = options || {};
+
+    var Store;
+
+    try {
+      Store = getSpecificStore(options);
+    } catch (err) {
+      if (callback) callback(err);
+      throw err;
+    }
+
+    var store = new Store(options);
+    process.nextTick(function() {
+      tolerate(function(callback) {
+        store.connect(callback);
+      }, options.timeout || 0, callback || function () {});
+    });
+    return store;
+  }
+};
