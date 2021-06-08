@@ -12,7 +12,11 @@ const userDB = require('./db/userqueries');
 
 const passport = require('passport');
 const LocalStrategy = require('passport-local');
-const port = 3000;
+let port = process.env.PORT;
+if (port == null || port == "") {
+  port = 3000;
+}
+
 
  // Enable Cross Origin Resource Sharing to all origins by default
 app.use(cors());
@@ -44,7 +48,7 @@ app.use(
       console.log(`Request object sessionID from client: ${req.sessionID}`)
       return uuid() // use UUIDs for session IDs
     },
-    secret: "session_secret",
+    secret: process.env.SESSION_SECRET || "session_secret",
     resave: false,
     saveUninitialized: true,
     store: new FileStore(),
