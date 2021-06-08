@@ -6,7 +6,7 @@ const userDB  = require('../db/userqueries')
 
   router.get('/', userDB.getUsers)
   router.get('/:id', userDB.getUserById)
-  router.post('/', userDB.createUser)
+  router.post('/register', userDB.createUser)
   router.put('/:id', userDB.updateUser)
   router.delete('/:id', userDB.deleteUser)
 

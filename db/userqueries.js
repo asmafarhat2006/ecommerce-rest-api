@@ -47,7 +47,7 @@ async function authenticateUser(data) {
 const createUser = (request, response) => {
   const { email,firstname,lastname } = request.body
 
-  pool.query('INSERT INTO users (email,firstname,lastname) VALUES ($1, $2, $3) RETURNING *', [email,firstname,lastname], (error, result) => {
+  pool.query('INSERT INTO users (email,firstname,lastname) VALUES ($1, $2, $3) RETURNING email,firstname,lastname', [email,firstname,lastname], (error, result) => {
     if (error) {
       throw error
     }

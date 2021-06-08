@@ -80,7 +80,7 @@ app.get('/', (request, response) => {
 
  
  /*  Login Endpoint*/
-  app.post('/login', (req, res, next) => {
+  app.post('/auth/login', (req, res, next) => {
     console.log('Inside POST /login callback')
     passport.authenticate('local', (err, user, info) => {
       console.log('Inside passport.authenticate() callback');
@@ -90,7 +90,7 @@ app.get('/', (request, response) => {
         console.log('Inside req.login() callback')
         console.log(`req.session.passport: ${JSON.stringify(req.session.passport)}`)
         console.log(`req.user: ${JSON.stringify(req.user)}`)
-        return res.send('You were authenticated & logged in!\n');
+        return res.status(200).send('You were authenticated & logged in!\n');
       })
     })(req, res, next);
   })
@@ -118,13 +118,13 @@ const orderRouter = require('./routes/order');
 app.use('/orders',orderRouter);
 
 const swaggerUi = require('swagger-ui-express');
-const yaml = require('js-yaml');
-const fs = require('fs');
-const path = require('path');
+//const yaml = require('js-yaml');
+//const fs = require('fs');
+//const path = require('path');
 
 // Loading via yml.safeLoad to avoid errors with special characters during processing
-const swaggerDocument = yaml.load(fs.readFileSync(path.resolve(__dirname, './swagger.yml'), 'utf8'));
-
+//const swaggerDocument = yaml.load(fs.readFileSync(path.resolve(__dirname, './swagger.yml'), 'utf8'));
+const swaggerDocument = require('./swagger.json');
 
   // Serves Swagger API documentation to /docs url
   app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
