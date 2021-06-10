@@ -13,7 +13,7 @@
         }
     },
     "schemes": ["http","https"],
-    "host": "ecommerce-rest-api-codecademy.herokuapp.com",
+    "host": "https://ecommerce-rest-api-codecademy.herokuapp.com",
     "basePath": "/",
     "paths" : {
         "/users/register" : {
