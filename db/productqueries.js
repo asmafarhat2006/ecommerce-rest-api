@@ -1,6 +1,6 @@
 const config = require('../config');
 const Pool = require('pg').Pool
-const pool = new Pool(config.db);
+const pool = new Pool(config);
 const getProducts = (request, response) => {
   
   pool.query('SELECT * FROM products ORDER BY id ASC', (error, results) => {

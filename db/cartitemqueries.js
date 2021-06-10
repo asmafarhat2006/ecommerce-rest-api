@@ -1,6 +1,6 @@
 const config = require('../config');
 const Pool = require('pg').Pool
-const pool = new Pool(config.db);
+const pool = new Pool(config);
 
 const getCartItemsByCartId = (request, response) => {
     const cartid = parseInt(request.params.cartid)

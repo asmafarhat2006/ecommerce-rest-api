@@ -1,6 +1,6 @@
 const config = require('../config');
 const Pool = require('pg').Pool
-const pool = new Pool(config.db);
+const pool = new Pool(config);
 const moment = require('moment');
 
 const getOrderItemsByOrderId = (request, response) => {

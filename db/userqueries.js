@@ -1,6 +1,6 @@
 const config = require('../config');
 const Pool = require('pg').Pool
-const pool = new Pool(config.db);
+const pool = new Pool(config);
 
 const getUsers = (request, response) => {
   pool.query('SELECT * FROM users ORDER BY id ASC', (error, results) => {
@@ -48,9 +48,9 @@ async function authenticateUser(data) {
 
 
 const createUser = (request, response) => {
-  const { email,firstname,lastname } = request.body
+  const { email,firstname,lastname,password } = request.body
 
-  pool.query('INSERT INTO users (email,firstname,lastname) VALUES ($1, $2, $3) RETURNING email,firstname,lastname', [email,firstname,lastname], (error, result) => {
+  pool.query('INSERT INTO users (email,firstname,lastname,password) VALUES ($1, $2, $3,$4) RETURNING email,firstname,lastname', [email,firstname,lastname,password], (error, result) => {
     if (error) {
       throw error
     }
