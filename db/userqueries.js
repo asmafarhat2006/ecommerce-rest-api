@@ -4,7 +4,7 @@ const pool = new Pool(config.db);
 
 const getUsers = (request, response) => {
   pool.query('SELECT * FROM users ORDER BY id ASC', (error, results) => {
-    if(!results.rows){
+    if(!results){
       response.status(200).json('No Rows Found')  
     }
     if (error) {
